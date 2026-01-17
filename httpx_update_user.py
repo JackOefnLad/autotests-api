@@ -4,7 +4,7 @@ from tools.fakers import get_random_email
 
 create_user_payload = {
     "email": get_random_email(),
-    "password": "string",
+    "password": "string1",
     "lastName": "string",
     "firstName": "string",
     "middleName": "string"
