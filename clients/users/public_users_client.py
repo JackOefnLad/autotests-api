@@ -21,6 +21,6 @@ class PublicUsersClient(APIClient):
         """
         Метод создания пользователя
         :request: Словарь с данными для создания пользоваеля
-        :return: Ответ от сервера в виде объекта httpx.Response
+        :return: Ответ от сервера в виде объекта
         """
         return self.post("/api/v1/users", json=request)
