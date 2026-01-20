@@ -1,5 +1,5 @@
 from clients.api_client import APIClient
-from httpx import Response, Request
+from httpx import Response
 from typing import TypedDict
 
 class GetCoursesQueryDict(TypedDict):
@@ -36,8 +36,8 @@ class CoursesClient(APIClient):
     Создание курса
     :request: Содержит все необходимые поля для создания курса
     """
-    def update_course_api(self,request, course_id: str) -> Response:
-        return self.patch(f"/api/v1/courses/{course_id}")
+    def update_course_api(self,request: UpdateCourseRequestDict, course_id: str) -> Response:
+        return self.patch(f"/api/v1/courses/{course_id}", json=request)
     """
     Изменение информации о курсе
     :request: Содержит все необходимые поля для изменения курса
