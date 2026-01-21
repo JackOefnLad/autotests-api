@@ -1,6 +1,8 @@
 from clients.api_client import APIClient
 from httpx import Response
 from typing import TypedDict
+from clients.private_http_builder import get_private_http_client, AuthenticationDict
+
 
 class GetCoursesQueryDict(TypedDict):
     userId: str
@@ -49,3 +51,5 @@ class CoursesClient(APIClient):
     Изменение информации о курсе
     :course_id: query-параметр для обращения к конкретному курсу
     """
+def get_files_client(user: AuthenticationDict) -> CoursesClient:
+        return CoursesClient(client=get_private_http_client(user))

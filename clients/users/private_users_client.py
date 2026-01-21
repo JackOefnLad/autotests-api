@@ -1,4 +1,5 @@
 from clients.api_client import APIClient
+from clients.private_http_builder import get_authentication_client, AuthenticationDict
 from httpx import Response
 from typing import TypedDict
     
@@ -30,3 +31,6 @@ class PrivateUsersClient(APIClient):
             user_id: str
             ) -> Response:
         return self.delete(f"/api/v1/users/{user_id}")
+    
+def get_private_users_client(user: AuthenticationDict) -> PrivateUsersClient:
+        return PrivateUsersClient(client=get_private_users_client())
