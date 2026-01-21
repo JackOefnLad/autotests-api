@@ -1,6 +1,5 @@
 import httpx
 
-import httpx
 import os
 
 os.environ["NO_PROXY"] = "*"  # отключение прокси
