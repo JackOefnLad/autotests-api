@@ -15,7 +15,7 @@ class Token(TypedDict):  # Добавили структуру с токенам
     refreshToken: str
 
 
-class LoginRequestDict(TypedDict):
+class  LoginRequestDict(TypedDict):
     """
     Описание структуры запроса на аутентификацию.
     """
