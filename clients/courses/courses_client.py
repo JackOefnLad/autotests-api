@@ -1,7 +1,9 @@
 from clients.api_client import APIClient
 from httpx import Response
 from typing import TypedDict
-from clients.private_http_builder import get_private_http_client, AuthenticationDict
+from clients.files.files_client import File
+from clients.users.private_users_client import User
+from clients.private_http_builder import get_private_http_client, AuthenticationUserDict
 
 
 class GetCoursesQueryDict(TypedDict):
@@ -20,6 +22,18 @@ class UpdateCourseRequestDict(TypedDict):
     minScore:           int   | None
     description:        str   | None
     estimatedTime:      str   | None
+class Courses(TypedDict):
+    id: str
+    title: str
+    maxScore: int
+    minScore: int
+    description: str
+    previewFile: File  # Вложенная структура файла
+    estimatedTime: str
+    createdByUser: User  # Вложенная структура пользователя    
+
+class CreateCourseResponseDict(TypedDict):
+    course: Courses
 
 class CoursesClient(APIClient):
     def  get_courses_api(self, query: GetCoursesQueryDict) -> Response:
@@ -51,5 +65,16 @@ class CoursesClient(APIClient):
     Изменение информации о курсе
     :course_id: query-параметр для обращения к конкретному курсу
     """
-def get_files_client(user: AuthenticationDict) -> CoursesClient:
-        return CoursesClient(client=get_private_http_client(user))
+
+    def create_course(self, request: CreateCourseRequestDict) -> CreateCourseResponseDict:
+        response = self.create_course_api(request)
+        return response.json()
+
+
+def get_courses_client(user: AuthenticationUserDict) -> CoursesClient:
+    """
+    Функция создаёт экземпляр CoursesClient с уже настроенным HTTP-клиентом.
+
+    :return: Готовый к использованию CoursesClient.
+    """
+    return CoursesClient(client=get_private_http_client(user))
