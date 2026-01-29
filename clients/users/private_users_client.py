@@ -1,29 +1,28 @@
-from typing import TypedDict
+from pydantic import BaseModel, EmailStr, Field
 
 from httpx import Response
 
 from clients.api_client import APIClient
-from clients.private_http_builder import get_private_http_client, AuthenticationUserDict
+from clients.private_http_builder import get_private_http_client, AuthenticationUserSchema
 
-class UpdateUserRequestDict(TypedDict):
+class UpdateUserRequestSchema(BaseModel):
     """
     Описание структуры запроса на обновление пользователя.
     """
-    email: str | None
-    lastName: str | None
-    firstName: str | None
-    middleName: str | None
+    email: EmailStr
+    last_name: str = Field(alias='lastName')
+    first_name: str = Field(alias='firstName')
+    middle_name: str = Field(alias='middleName')
 
-class User(TypedDict):
+class UserSchema(BaseModel):
     id: str
-    email: str
-    password: str
-    lastName: str
-    firstName: str
-    middleName: str
+    email: EmailStr
+    last_name: str = Field(alias='lastName')
+    first_name: str = Field(alias='firstName')
+    middle_name: str = Field(alias='middleName')
 
-class GetUserResponseDict(TypedDict):
-    user: User
+class GetUserResponseSchema(BaseModel):
+    user: UserSchema
 
 class PrivateUsersClient(APIClient):
     """
@@ -47,7 +46,7 @@ class PrivateUsersClient(APIClient):
         """
         return self.get(f"/api/v1/users/{user_id}")
 
-    def update_user_api(self, user_id: str, request: UpdateUserRequestDict) -> Response:
+    def update_user_api(self, user_id: str, request: UpdateUserRequestSchema) -> Response:
         """
         Метод обновления пользователя по идентификатору.
 
@@ -66,12 +65,12 @@ class PrivateUsersClient(APIClient):
         """
         return self.delete(f"/api/v1/users/{user_id}")
 
-    def get_user(self, user_id: str) -> GetUserResponseDict:
+    def get_user(self, user_id: str) -> GetUserResponseSchema:
         response = self.get_user_api(user_id)
         return response.json()
 
 # Добавляем builder для PrivateUsersClient
-def get_private_users_client(user: AuthenticationUserDict) -> PrivateUsersClient:
+def get_private_users_client(user: AuthenticationUserSchema) -> PrivateUsersClient:
     """
     Функция создаёт экземпляр PrivateUsersClient с уже настроенным HTTP-клиентом.
 
