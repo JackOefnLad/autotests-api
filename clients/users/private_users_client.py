@@ -1,7 +1,7 @@
 from clients.api_client import APIClient
 from httpx import Response
 from typing import TypedDict
-from private_http_builder import get_private_http_client, AuthenticationUserDict
+from clients.private_http_builder import get_private_http_client, AuthenticationUserDict
 
 class UpdateUserRequestDict(TypedDict):
     """
