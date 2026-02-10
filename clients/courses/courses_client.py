@@ -1,80 +1,87 @@
 from clients.api_client import APIClient
 from httpx import Response
-from typing import TypedDict
-from clients.files.files_client import File
-from clients.users.private_users_client import User
-from clients.private_http_builder import get_private_http_client, AuthenticationUserSchema
+from typing import Type, TypedDict
+from private_http_builder import AuthenticationUserDict, get_private_http_client
 
 
 class GetCoursesQueryDict(TypedDict):
-    userId: str
+    """
+    Описание структуры запроса на получение списка курсов.
+    """
+    userId: str    
+
 class CreateCourseRequestDict(TypedDict):
-    title:              str
-    maxScore:           int 
-    minScore:           int
-    description:        str
-    estimatedTime:      str
-    previewFileId:      str
-    createdByUserId:    str
-class UpdateCourseRequestDict(TypedDict):
-    title:              str   | None
-    maxScore:           int   | None
-    minScore:           int   | None
-    description:        str   | None
-    estimatedTime:      str   | None
-class Courses(TypedDict):
-    id: str
+    """
+    Описание структуры запроса на создание курса.
+    """
     title: str
     maxScore: int
     minScore: int
     description: str
-    previewFile: File  # Вложенная структура файла
     estimatedTime: str
-    createdByUser: User  # Вложенная структура пользователя    
+    previewFileId: str
+    createdByUserId: str
 
-class CreateCourseResponseDict(TypedDict):
-    course: Courses
+
+class UpdateCourseRequestDict(TypedDict):
+    """
+    Описание структуры запроса на обновление курса.
+    """
+    title: str | None
+    maxScore: int | None
+    minScore: int | None
+    description: str | None
+    estimatedTime: str | None
+
 
 class CoursesClient(APIClient):
-    def  get_courses_api(self, query: GetCoursesQueryDict) -> Response:
+
+    def get_courses_api(self,query: GetCoursesQueryDict) -> Response:
+        """
+        Метод получения списка курсов.
+
+        :param query: Словарь с userId.
+        :return: Ответ от сервера в виде объекта httpx.Response
+        """
         return self.get("/api/v1/courses", params=query)
-    """
-    Получение списка курсов
-    """
-    def get_courses_api(self, course_id: str ) -> Response:
+    
+    def get_course_api(self, course_id: str)-> Response:
+        """
+        Метод получения курса.
+
+        :param course_id: Идентификатор курса.
+        :return: Ответ от сервера в виде объекта httpx.Response
+        """
         return self.get(f"/api/v1/courses/{course_id}")
-    """
-    Получение конкретного курса
-    """
-    def create_course_api(self, request:CreateCourseRequestDict) -> Response:
+
+    def create_course_api(self, request: CreateCourseRequestDict) -> Response:
+        """
+        Метод создания курса.
+
+        :param request: Словарь с title, maxScore, minScore, description, estimatedTime, 
+        previewFileId, createdByUserId.
+        :return: Ответ от сервера в виде объекта httpx.Response
+        """
         return self.post("/api/v1/courses", json=request)
-    """
-    Создание курса
-    :request: Содержит все необходимые поля для создания курса
-    """
-    def update_course_api(self,request: UpdateCourseRequestDict, course_id: str) -> Response:
+    
+    def update_course_api(self, course_id: str, request: UpdateCourseRequestDict) -> Response:
+        """
+        Метод обновления курса.
+
+        :param course_id: Идентификатор курса.
+        :param request: Словарь с title, maxScore, minScore, description, estimatedTime.
+        :return: Ответ от сервера в виде объекта httpx.Response
+        """
         return self.patch(f"/api/v1/courses/{course_id}", json=request)
-    """
-    Изменение информации о курсе
-    :request: Содержит все необходимые поля для изменения курса
-    :course_id: query-параметр для обращения к конкретному курсу
-    """
-    def delete_course_api(self, course_id : str) -> Response:
+    
+    def delete_course_api(self, course_id:str) -> Response:
+        """
+        Метод удаления курса.
+
+        :param course_id: Идентификатор курса.
+        :return: Ответ от сервера в виде объекта httpx.Response 
+        """
         return self.delete(f"/api/v1/courses/{course_id}")
-    """
-    Изменение информации о курсе
-    :course_id: query-параметр для обращения к конкретному курсу
-    """
-
-    def create_course(self, request: CreateCourseRequestDict) -> CreateCourseResponseDict:
-        response = self.create_course_api(request)
-        return response.json()
-
-
-def get_courses_client(user: AuthenticationUserSchema) -> CoursesClient:
-    """
-    Функция создаёт экземпляр CoursesClient с уже настроенным HTTP-клиентом.
-
-    :return: Готовый к использованию CoursesClient.
-    """
-    return CoursesClient(client=get_private_http_client(user))
+    
+def get_files_client(user: AuthenticationUserDict) ->CoursesClient:
+        return CoursesClient(client=get_private_http_client(user))

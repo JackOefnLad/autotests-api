@@ -1,28 +1,16 @@
-from pydantic import BaseModel, EmailStr, Field
-
-from httpx import Response
-
 from clients.api_client import APIClient
-from clients.private_http_builder import get_private_http_client, AuthenticationUserSchema
+from httpx import Response
+from typing import TypedDict
+from private_http_builder import get_private_http_client, AuthenticationUserDict
 
-class UpdateUserRequestSchema(BaseModel):
+class UpdateUserRequestDict(TypedDict):
     """
     Описание структуры запроса на обновление пользователя.
     """
-    email: EmailStr
-    last_name: str = Field(alias='lastName')
-    first_name: str = Field(alias='firstName')
-    middle_name: str = Field(alias='middleName')
-
-class UserSchema(BaseModel):
-    id: str
-    email: EmailStr
-    last_name: str = Field(alias='lastName')
-    first_name: str = Field(alias='firstName')
-    middle_name: str = Field(alias='middleName')
-
-class GetUserResponseSchema(BaseModel):
-    user: UserSchema
+    email: str | None
+    lastName: str | None
+    firstName: str | None
+    middleName: str | None
 
 class PrivateUsersClient(APIClient):
     """
@@ -36,7 +24,7 @@ class PrivateUsersClient(APIClient):
         :return: Ответ от сервера в виде объекта httpx.Response
         """
         return self.get("/api/v1/users/me")
-
+    
     def get_user_api(self, user_id: str) -> Response:
         """
         Метод получения пользователя по идентификатору.
@@ -45,8 +33,8 @@ class PrivateUsersClient(APIClient):
         :return: Ответ от сервера в виде объекта httpx.Response
         """
         return self.get(f"/api/v1/users/{user_id}")
-
-    def update_user_api(self, user_id: str, request: UpdateUserRequestSchema) -> Response:
+    
+    def update_user_api(self, user_id: str, request: UpdateUserRequestDict) -> Response:
         """
         Метод обновления пользователя по идентификатору.
 
@@ -55,8 +43,8 @@ class PrivateUsersClient(APIClient):
         :return: Ответ от сервера в виде объекта httpx.Response
         """
         return self.patch(f"/api/v1/users/{user_id}", json=request)
-
-    def delete_user_api(self, user_id: str) -> Response:
+    
+    def delete_user_api(self, user_id: str)-> Response:
         """
         Метод удаления пользователя по идентификатору.
 
@@ -64,16 +52,6 @@ class PrivateUsersClient(APIClient):
         :return: Ответ от сервера в виде объекта httpx.Response
         """
         return self.delete(f"/api/v1/users/{user_id}")
-
-    def get_user(self, user_id: str) -> GetUserResponseSchema:
-        response = self.get_user_api(user_id)
-        return response.json()
-
-# Добавляем builder для PrivateUsersClient
-def get_private_users_client(user: AuthenticationUserSchema) -> PrivateUsersClient:
-    """
-    Функция создаёт экземпляр PrivateUsersClient с уже настроенным HTTP-клиентом.
-
-    :return: Готовый к использованию PrivateUsersClient.
-    """
+    
+def get_private_user_client(user: AuthenticationUserDict)-> PrivateUsersClient:
     return PrivateUsersClient(client=get_private_http_client(user))

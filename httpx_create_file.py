@@ -33,6 +33,6 @@ create_file_response = httpx.post(
     data = {"filename":"plane.png", "directory": "courses"},
     files = {"upload_file": open('./testdata/files/plane.png', 'rb')},
     headers= create_file_headers
-    )
+    ) 
 create_file_response_data=create_file_response.json()
 print(create_file_response_data)

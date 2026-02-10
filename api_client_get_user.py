@@ -1,4 +1,5 @@
-from clients.users.public_users_client import get_public_users_client, CreateUserRequestDict
+from clients.users.public_users_client import get_public_users_client
+from clients.users.user_schema import CreateUserRequestSchema
 from clients.users.private_users_client import get_private_users_client
 from clients.private_http_builder import AuthenticationUserSchema
 from tools.fakers import get_random_email
@@ -8,21 +9,21 @@ os.environ["NO_PROXY"] = "*"  # отключение прокси
 
 public_users_client = get_public_users_client()
 
-create_user_request = CreateUserRequestDict(
+create_user_request = CreateUserRequestSchema(
     email = get_random_email(),
     password = "string",
-    lastName = "string",
-    firstName = "string",
-    middleName =  "string",
+    last_name = "string",
+    first_name = "string",
+    middle_name =  "string",
 )
 create_user_response = public_users_client.create_user(create_user_request)
 print(create_user_response)
 
 authentication_user = AuthenticationUserSchema(
-    email = create_user_request['email'],
-    password = create_user_request['password']
+    email = create_user_request.email,
+    password = create_user_request.password
 )
 
 private_users_client = get_private_users_client(authentication_user)
-get_user_response = private_users_client.get_user(create_user_response['user']['id'])
+get_user_response = private_users_client.get_user(create_user_response.user.id)
 print(get_user_response)
