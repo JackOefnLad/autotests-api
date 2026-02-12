@@ -47,8 +47,8 @@ class AuthenticationClient(APIClient):
         response = self.login_api(request)
         return response.json()
     
-def get_authentication_client () -> AuthenticationClient:
+def get_authentication_client() -> AuthenticationClient:
     """
     Функция def_authentication_client готовит(возвращает) AuthenticationClient с параметрами/значениями из get_public_http_client(билдера)
     """
-    return AuthenticationClient(client=get_public_http_client)
+    return AuthenticationClient(client=get_public_http_client())
