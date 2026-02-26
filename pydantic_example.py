@@ -18,10 +18,15 @@ user = User(id="1",
             name="John",
             age=20, 
             address=ad1
+            #address={'city':"Moscow", 'zip_code':"10000"
             #address: Address(city="Saint-Petersburgh", zip_code="190000"
             )
 print(user.address.city)
-
+#Преобразование из модели в словарь
+user.model_dump()
+#Преобразование из модели в JSON-строка
+user.model_dump_json()
+ 
 #Aliases
 class CourseSchema(BaseModel):
     id: str

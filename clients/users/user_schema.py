@@ -39,3 +39,6 @@ class CreateUserResponseSchema(BaseModel):
 
 class GetUserResponseSchema(BaseModel):
     user: UserSchema
+    
+class UpdateUserResponseSchema(BaseModel):
+    user: UserSchema
