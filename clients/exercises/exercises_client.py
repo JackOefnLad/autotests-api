@@ -1,57 +1,11 @@
 from clients.api_client import APIClient
-from clients.courses.courses_client import Course
+from clients.courses.courses_client import 
 from clients.private_http_builder import AuthenticationUserSchema, get_private_http_client
+from clients.exercises.exercise_schema import
 
 from httpx import Response
-from typing import TypedDict
 
-class Exercise(TypedDict):
-  id: str
-  title: str
-  courseId: Course['id']
-  maxScore: 0
-  minScore: 0
-  orderIndex: 0
-  description: str
-  estimatedTime: str
-class GetExercisesQueryDict(TypedDict):
-    courseId:   str
-    """
-    Описание структуры запроса на получение списка упражнений.
-    """
 
-class GetExercisesResponseDict(TypedDict):
-    exercises: list[Exercise]
-
-class GetExerciseResponseDict(TypedDict):
-    exercise: Exercise
-
-class CreateExerciseRequestDict(TypedDict):
-    """
-    Описание структуры запроса на создание упражнения.
-    """
-    title: str
-    courseId: str
-    maxScore: int
-    minScore: int
-    orderIndex: int
-    description: str
-    estimatedTime: str
-class CreateExerciseResponseDict(TypedDict):
-    exercise: Exercise
-
-class UpdateExerciseRequestDict(TypedDict):
-    """
-    Описание структуры запроса на обновление упражнения.
-    """ 
-    title: str
-    maxScore: int
-    minScore: int
-    orderIndex: int
-    description: str
-    estimatedTime:  str
-class UpdateExerciseResponseDict(TypedDict):
-    exercise: Exercise
 
 class ExercisesClient(APIClient):
     """
