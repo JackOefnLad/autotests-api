@@ -1,10 +1,12 @@
 from clients.users.public_users_client import get_public_users_client
 from clients.files.files_client import get_files_client
 from clients.private_http_builder import AuthenticationUserSchema
-from clients.courses.courses_client import get_courses_client, CreateCourseRequestDict
-from clients.exercises.exercises_client import get_exercise_client, CreateExerciseRequestDict
+from clients.courses.courses_client import get_courses_client
+from clients.exercises.exercises_client import get_exercise_client
 from clients.users.user_schema import CreateUserRequestSchema
 from clients.files.files_schema import CreateFileRequestSchema
+from clients.courses.course_schema import CreateCourseRequestSchema
+from clients.exercises.exercise_schema import CreateExerciseRequestSchema
 
 
 from tools.fakers import get_random_email
@@ -43,7 +45,7 @@ courses_client = get_courses_client(authentication_user)
 
 # Создаем курс
 print("Создание курса...")
-create_course_request = CreateCourseRequestDict(
+create_course_request = CreateCourseRequestSchema(
     title="Python",
     maxScore=100,
     minScore=10,
@@ -53,7 +55,7 @@ create_course_request = CreateCourseRequestDict(
     createdByUserId=create_user_response.user.id
 )
 create_course_response = courses_client.create_course(create_course_request)
-course_id = create_course_response['course']['id']
+course_id = create_course_response.course.id
 print(f"Курс создан, ID: {course_id}")
 
 # 4. Инициализируем клиент заданий (с авторизацией)
@@ -61,7 +63,7 @@ exercises_client = get_exercise_client(authentication_user)
 
 # Создаем задание
 print("Создание задания...")
-exercise_request = CreateExerciseRequestDict(
+exercise_request = CreateExerciseRequestSchema(
     title="Первое тестовое задание",
     courseId=course_id,
     maxScore=10,

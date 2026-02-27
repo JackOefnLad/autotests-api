@@ -37,7 +37,7 @@ class CreateCourseRequestSchema(BaseModel):
     description: str
     preview_file_id: str = Field(alias='previewFileId')
     estimated_time: str |None = Field(alias='estimatedTime')
-    created_by_user_id: str = Field(alias='createdByUser')
+    created_by_user_id: str = Field(alias='createdByUserId')
 
 
 # Добавили описание структуры ответа на создание курса
