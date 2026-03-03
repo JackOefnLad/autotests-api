@@ -1,4 +1,5 @@
 """
+Объект "Курс"
 {
   "course": {
     "id": "string",
@@ -14,7 +15,7 @@ import uuid
 from pydantic import BaseModel, Field, ConfigDict
 from pydantic.alias_generators import to_camel
 class CourseSchema(BaseModel):
-    # model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
+    model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True)
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     title: str = 'course-title-default'
     max_score: int = Field(alias='maxScore')
@@ -29,6 +30,8 @@ course_default_model = CourseSchema(id='1',
                                     description='Course',
                                     estimatedTime='2 weeks'
                                     )
+print(course_default_model)
+
 course_dict_model ={                "id":'1',
                                     "title":'Api-dict',
                                     "maxScore":100,
@@ -36,6 +39,7 @@ course_dict_model ={                "id":'1',
                                     "description":'Course-dcit',
                                     "estimatedTime":'2 weeks'
 }
+print(CourseSchema(**course_dict_model))
 
 course_json = """
 {
@@ -47,14 +51,13 @@ course_json = """
     "estimatedTime": "1 week"
 }
 """
+course_json_model = CourseSchema.model_validate_json(course_json) #метод позволяет из JSON-строки валидировать модель
+#Десериализация - из JSON-строки получаем Модель. Сереализация via versa
 
-print(course_default_model)
-#---------------------------
-
-# print(CourseSchema(**course_dict_model))
 #--------------------------
-# course_json_model = CourseSchema.model_validate_json(course_json)
 # print(course_json_model)
 #print(CourseSchema.model_validate_json(course_json))
 # print(course_json_model.model_dump()) # сериализация в словарь
 # print(course_json_model.model_dump_json(by_alias=True)) # сериализация в json со значениями из alias в модели
+# alias_generator=to_camel - автоматически генерирует Alias`ы для всех полей в camelCase
+# populate_by_name=True - означает, что мы принимает не только Alias`ы, но и оригинальные имена
