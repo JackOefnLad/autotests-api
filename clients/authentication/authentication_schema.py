@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field, EmailStr, HttpUrl
-
+from tools.fakers import fake
 
 class TokenSchema(BaseModel):  # Добавили структуру с токенами аутентификации
     """
@@ -10,12 +10,12 @@ class TokenSchema(BaseModel):  # Добавили структуру с токе
     refresh_token: str = Field(alias='refreshToken')
 
 
-class  LoginRequestSchema(BaseModel):
+class LoginRequestSchema(BaseModel):
     """
     Описание структуры запроса на аутентификацию.
     """
-    email: EmailStr
-    password: str
+    email: str = Field(default_factory=fake.email)  # Добавили генерацию случайного email
+    password: str = Field(default_factory=fake.password)  # Добавили генерацию случайного пароля
 
 
 class LoginResponseSchema(BaseModel):  # Добавили структуру ответа аутентификации
@@ -29,4 +29,6 @@ class RefreshRequestSchema(BaseModel):
     """
     Описание структуры запроса для обновления токена.
     """
-    refresh_token: str = Field(alias='refreshToken')
+    refresh_token: str = Field(alias='refreshToken', default_factory=fake.sentence)
+
+print (RefreshRequestSchema())
