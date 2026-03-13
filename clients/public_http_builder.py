@@ -1,5 +1,7 @@
 from httpx import Client
+import os
 
+os.environ["NO_PROXY"] = "*"  # отключение прокси
 
 def get_public_http_client() -> Client:
     """
