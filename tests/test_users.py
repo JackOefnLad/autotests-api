@@ -5,7 +5,7 @@ from jsonschema import validate
 from tools.assertions.base import assert_status_code
 from tools.assertions.user import assert_create_user_response
 from clients.users.private_users_client import PrivateUsersClient
-from tests.conftest import UserFixture
+from fixtures.users import UserFixture
 from tools.assertions.users import assert_get_user_response
 import pytest
 

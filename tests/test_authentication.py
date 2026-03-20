@@ -5,7 +5,7 @@ from clients.authentication.authentication_client import get_authentication_clie
 from clients.users.public_users_client import get_public_users_client, PublicUsersClient
 from tools.assertions.base import assert_status_code
 from tools.assertions.authentication import assert_login_response
-from tests.conftest import UserFixture
+from fixtures.users import UserFixture
 from jsonschema import validate
 import pytest
 

@@ -8,7 +8,7 @@ def assert_user(actual: UserSchema, expected: UserSchema)-> None:
     assert_equal(actual.last_name, expected.last_name, "last_name")
     assert_equal(actual.first_name, expected.first_name, "first_name")
     assert_equal(actual.middle_name, expected.middle_name, "middle_name")
-    
+
 def assert_get_user_response(
         get_user_response: GetUserResponseSchema,
         create_user_response: CreateUserResponseSchema
